@@ -2,11 +2,11 @@
 
 while true
 do
-  	battery_level=`cat /sys/class/power_supply/BAT0/capacity`
+  	battery_level=$(cat /sys/class/power_supply/BAT0/capacity)
 	
-	if [ $battery_level -ge 95 ]; then
+	if [ "$battery_level" -ge 90 ]; then
 		notify-send "Battery Full" "Level: ${battery_level}%"
-	elif [ $battery_level -le 10 ]; then
+	elif [ "$battery_level" -le 10 ]; then
 		notify-send --urgency=CRITICAL "Battery Low" "Level: ${battery_level}%"
 	fi
  	
