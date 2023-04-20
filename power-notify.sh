@@ -20,6 +20,12 @@ check_args() {
 		lower_limit="$2"
 		upper_limit="$1"
 	fi
+
+	if [[ "$lower_limit" -le 0 || "$upper_limit" -gt 100 ]]; then
+		echo "lower limit cannot be less than or equal to zero"
+		echo "upper limit cannot be greater than 100"
+		exit 1
+	fi
 }
 
 start_listener() {
