@@ -34,6 +34,11 @@ start_listener() {
   		battery_level=$(cat /sys/class/power_supply/BAT0/capacity)
   		battery_status=$(cat /sys/class/power_supply/BAT0/status)
 
+		# suspend to RAM
+		if [[ "$battery_status" == "Discharging" && "$battery_level" -le "$suspend_limit" ]]; then
+			loginctl suspend
+		fi
+
 		if [[ "$battery_status" == "Charging" && "$battery_level" -ge "$upper_limit" ]]; then
 			notify-send -t 3000 "Battery Full" "Level: ${battery_level}%"
 		elif [[ "$battery_status" == "Discharging" && "$battery_level" -le "$lower_limit" ]]; then
@@ -47,6 +52,8 @@ start_listener() {
 
 lower_limit="$1"
 upper_limit="$2"
+
+suspend_limit=5
 
 check_args "$@"
 start_listener
