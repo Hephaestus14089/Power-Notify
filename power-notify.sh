@@ -23,11 +23,16 @@ check_args() {
 }
 
 check_vals() {
-	if [[ "$lower_limit" -le 0 || "$upper_limit" -gt 100 ]]; then
-		echo "error:"
-		echo "lower limit cannot be less than or equal to zero"
-		echo "upper limit cannot be greater than 100"
+	if [[ "$upper_limit" -gt 100 ]]; then
+		echo "error: upper limit cannot be greater than 100"
 		exit 1
+	fi
+
+	if [[ "$lower_limit" -le 0 ]]; then
+		echo "warning: you might want to recheck your lower_limit value"
+		echo "current value (lower_limit): ${lower_limit}"
+		echo ""
+		echo "setting lower_limit to be less than zero is eqivalent to not receiving a lower limit notification."
 	fi
 
 	if [[ "$suspend_limit" -ge 100 ]]; then
