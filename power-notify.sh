@@ -20,11 +20,27 @@ check_args() {
 		lower_limit="$2"
 		upper_limit="$1"
 	fi
+}
 
+check_vals() {
 	if [[ "$lower_limit" -le 0 || "$upper_limit" -gt 100 ]]; then
 		echo "lower limit cannot be less than or equal to zero"
 		echo "upper limit cannot be greater than 100"
 		exit 1
+	fi
+
+	if [[ "$suspend_limit" -ge 100 ]]; then
+		echo "suspend limit must be less than 100"
+		exit 1
+	fi
+
+	if [[ "$suspend_limit" -gt 50 ]]; then
+		msg="warning: you might want to recheck your suspend_limit value"
+		if [[ "$suspend_limit" -gt 80 ]]; then
+			msg="warning: please, for the sake of sanity, recheck your suspend_limit value"
+		fi
+		echo "$msg"
+		echo "current value (suspend_limit): $suspend_limit"
 	fi
 }
 
@@ -56,4 +72,5 @@ upper_limit="$2"
 suspend_limit=5
 
 check_args "$@"
+check_vals
 start_listener
