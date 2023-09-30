@@ -10,7 +10,7 @@ check_args() {
 		usage
 		exit 1
 	elif [ "$1" -eq "$2" ]; then
-		echo "Two limits must not be same!"
+		echo "error: upper and lower limits must not be equal"
 		echo ""
 		usage
 		exit 1
@@ -24,13 +24,14 @@ check_args() {
 
 check_vals() {
 	if [[ "$lower_limit" -le 0 || "$upper_limit" -gt 100 ]]; then
+		echo "error:"
 		echo "lower limit cannot be less than or equal to zero"
 		echo "upper limit cannot be greater than 100"
 		exit 1
 	fi
 
 	if [[ "$suspend_limit" -ge 100 ]]; then
-		echo "suspend limit must be less than 100"
+		echo "error: suspend limit must be less than 100"
 		exit 1
 	fi
 
