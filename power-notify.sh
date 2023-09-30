@@ -2,14 +2,23 @@
 
 usage() {
 	echo "usage: ./power-notify.sh <lower_limit> <upper_limit>"
+	echo "       ./power-notify.sh <lower_limit>"
+	echo "single argument will be treated as the lower limit value"
 	echo "limits are interpreted as battery charge percentages."
 }
 
 check_args() {
-	if [ "$#" -lt 2 ]; then
+	if [[ "$#" -lt 1 || "$#" -gt 2 ]]; then
 		usage
 		exit 1
-	elif [ "$1" -eq "$2" ]; then
+	fi
+
+	if [ "$#" -eq 1 ]; then
+		upper_limit=101
+		return
+	fi
+
+	if [ "$1" -eq "$2" ]; then
 		echo "error: upper and lower limits must not be equal"
 		echo ""
 		usage
@@ -23,9 +32,11 @@ check_args() {
 }
 
 check_vals() {
-	if [[ "$upper_limit" -gt 100 ]]; then
-		echo "error: upper limit cannot be greater than 100"
-		exit 1
+	if [[ "$n_args" -eq 2 && "$upper_limit" -gt 100 ]]; then
+		echo "warning: you might want to recheck your upper_limit value"
+		echo "current value (upper_limit): ${upper_limit}"
+		echo ""
+		echo "setting upper_limit to be greater than 100 is eqivalent to not receiving an upper limit notification."
 	fi
 
 	if [[ "$lower_limit" -le 0 ]]; then
@@ -78,5 +89,7 @@ upper_limit="$2"
 suspend_limit=5
 
 check_args "$@"
-check_vals
+n_args="$#"
+check_vals "$n_args"
+
 start_listener
