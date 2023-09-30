@@ -2,7 +2,7 @@
 
 usage() {
 	echo "usage: ./power-notify.sh <lower_limit> <upper_limit>"
-	echo "limits must be battery charge percentages."
+	echo "limits are interpreted as battery charge percentages."
 }
 
 check_args() {
